@@ -126,7 +126,7 @@ pharmacy-billing-system/
 
 ## 👨‍💻 Author
 
-**Chanchal Tiwari**  
+**Saloni Tiwari**  
 Beginner Python & Data Science Learner  
 
 ---
