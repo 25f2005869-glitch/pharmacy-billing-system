@@ -71,7 +71,8 @@ It calculates medicine bills, assigns loyalty points based on purchase amount, a
 ```bash
 python pharmacy_billing.py
 
-Project Structure
+
+📂 Project Structure
 Copy code
 
 pharmacy-billing-system/
