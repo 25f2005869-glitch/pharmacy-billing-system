@@ -1,132 +1,133 @@
-# 💊 Pharmacy Billing System
+💊 Pharmacy Billing System
 
-A beginner-friendly Python project that simulates a real-world pharmacy billing system.  
-The program calculates medicine bills, tracks customer visits, and manages loyalty points with redemption functionality.
-
----
-
-## 📌 Project Overview
-
-This project is designed to practice basic Python programming concepts by building a simple billing system used in medical stores.
-
-It calculates medicine bills, assigns loyalty points based on purchase amount, and allows customers to redeem points during future visits.
+A beginner-friendly Python project that simulates a real-world pharmacy billing system.
+This project includes both Command Line (CLI) and Graphical User Interface (GUI) versions.
 
 ---
 
-## 🎯 Objectives
+📌 Project Overview
+
+This project is designed to practice Python programming by building a real-world billing system used in medical stores.
+
+It calculates medicine bills, assigns loyalty points, and allows customers to redeem points in future visits.
+
+---
+
+🎯 Objectives
 
 - Simulate a real pharmacy billing system
-- Practice Python loops and conditional statements
+- Practice Python loops and conditions
 - Implement business logic
 - Handle user input
-- Build a beginner portfolio project
+- Build a portfolio-level project
 
 ---
 
-## 🧠 Concepts Used
+🧠 Concepts Used
 
 - Loops (for loops, nested loops)
 - Conditional statements (if-else)
 - User input handling
 - Arithmetic operations
-- Business logic implementation
+- Business logic
 
 ---
 
-## ⚙️ Features
+⚙️ Features
 
-- Multiple customer visits support
-- Multiple medicine types per visit
+- Multiple customer visits
+- Multiple medicines per visit
 - Automatic bill calculation
-- Loyalty points earning system
-- Points redemption option
+- Loyalty points system
+- Points redemption
 - Discount calculation
-- Basic input validation
+- Input validation
 
 ---
 
-## 🎁 Loyalty Points Logic
+🎁 Loyalty Points Logic
 
-| Bill Amount | Points Earned |
-|-------------|--------------|
-| ₹100 spent  | 1 point |
-
-Customers earn loyalty points based on their purchase amount.
+Bill Amount| Points Earned
+₹100| 1 point
 
 ---
 
-## 🔄 Redemption Rules
+🔄 Redemption Rules
 
 - 1 point = ₹25 discount
-- Minimum 10 points required for redemption
-- Redemption cannot exceed total bill amount
-- Cannot redeem more points than available
+- Minimum 10 points required
+- Cannot exceed total bill
+- Cannot redeem more than available points
 
 ---
 
-## ▶️ How to Run
+▶️ How to Run
 
-1. Install Python 3.x
-2. Download or clone this repository
-3. Open terminal in the project folder
-4. Run the program
+🔹 CLI Version
 
 python pharmacy_billing_system.py
 
+🔹 GUI Version
+
+python pharmacy_pro_gui.py
+
 ---
 
-## 📁 Project Structure
+📁 Project Structure
 
 pharmacy-billing-system/
 │
-├── pharmacy_billing_system.py
+├── pharmacy_billing_system.py   # CLI version
+├── pharmacy_pro_gui.py          # GUI version
 ├── README.md
-├── sample-output.txt (optional)
+└── sample-output.txt
 
 ---
 
-## 🔄 Sample Workflow
+🔄 Sample Workflow
 
-1. Enter number of visits  
-2. Enter medicine types  
-3. Enter quantity and cost  
-4. Bill is generated  
-5. Loyalty points are awarded  
-6. Redemption option appears  
-
----
-
-## 📚 Learning Outcomes
-
-- Real-world problem modelling
-- Writing structured Python programs
-- Handling nested loops
-- Implementing reward systems
-- Input validation basics
+- Enter number of visits
+- Enter medicines
+- Enter quantity & cost
+- Bill is generated
+- Points are added
+- Redemption option
 
 ---
 
-## 🚀 Future Improvements
+📚 Learning Outcomes
 
-- GUI version (Tkinter / Web)
-- Database storage
-- Medicine inventory system
-- Customer history tracking
-- Receipt generation
+- Real-world problem solving
+- Structured programming
+- Nested loops
+- Reward system logic
+- Input validation
 
 ---
 
-## 🛠 Technologies Used
+🚀 Future Improvements
+
+- Database integration
+- Inventory system
+- Customer history
+- PDF bill generation
+- Web version
+
+---
+
+🛠 Technologies Used
 
 - Python 3
-- CLI (Command Line Interface)
+- Tkinter (GUI)
+- CLI
 
 ---
 
-## 👨‍💻 Author
+👨‍💻 Author
 
-Saloni Tiwari  
-Python & Data Science Student  
-GitHub Portfolio Project
+Saloni Tiwari
+Python & Data Science Student
+
+---
 
 ⭐ If you like this project, feel free to star the repository!
