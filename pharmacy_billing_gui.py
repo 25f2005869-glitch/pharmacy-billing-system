@@ -8,148 +8,223 @@
 import tkinter as tk
 from tkinter import messagebox
 
-points = 0
-medicines = []
+# Loyalty rules
+POINTS_PER_100_RUPEES = 1
+RUPEES_PER_POINT = 25
+MIN_POINTS_TO_REDEEM = 10
 
-# ========================================
-# Add Medicine
-# ========================================
-def add_medicine():
-    try:
-        name = entry_name.get()
-        qty = int(entry_qty.get())
-        cost = float(entry_cost.get())
 
-        if name == "" or qty <= 0 or cost <= 0:
-            messagebox.showerror("Error", "Invalid Input")
+class PharmacyBillingApp:
+    def __init__(self, root: tk.Tk):
+        self.root = root
+        self.root.title("Pharmacy Billing System")
+        self.root.geometry("520x650")
+
+        # state
+        self.points = 0
+        self.medicines = []  # list of dicts: {name, qty, cost, total}
+        self.bill_generated = False
+        self.last_total = 0.0
+        self.last_earned_points = 0
+
+        self._build_ui()
+        self._refresh_summary()
+
+    # ----------------------
+    # UI
+    # ----------------------
+    def _build_ui(self):
+        tk.Label(self.root, text="Pharmacy Billing System", font=("Arial", 16, "bold")).pack(pady=10)
+
+        # Inputs
+        frame = tk.Frame(self.root)
+        frame.pack(pady=5)
+
+        tk.Label(frame, text="Medicine Name").grid(row=0, column=0, sticky="w")
+        self.entry_name = tk.Entry(frame, width=30)
+        self.entry_name.grid(row=0, column=1, padx=8)
+
+        tk.Label(frame, text="Quantity").grid(row=1, column=0, sticky="w")
+        self.entry_qty = tk.Entry(frame, width=30)
+        self.entry_qty.grid(row=1, column=1, padx=8)
+
+        tk.Label(frame, text="Cost (₹)").grid(row=2, column=0, sticky="w")
+        self.entry_cost = tk.Entry(frame, width=30)
+        self.entry_cost.grid(row=2, column=1, padx=8)
+
+        tk.Button(self.root, text="Add Medicine", command=self.add_medicine).pack(pady=6)
+
+        # Listbox
+        tk.Label(self.root, text="Cart").pack()
+        self.listbox = tk.Listbox(self.root, width=62)
+        self.listbox.pack(pady=8)
+
+        # Buttons
+        btns = tk.Frame(self.root)
+        btns.pack(pady=6)
+
+        tk.Button(btns, text="Generate Bill", command=self.generate_bill, width=16).grid(row=0, column=0, padx=6)
+        tk.Button(btns, text="Clear Cart", command=self.clear_cart, width=16).grid(row=0, column=1, padx=6)
+        tk.Button(btns, text="New Visit", command=self.new_visit, width=16).grid(row=0, column=2, padx=6)
+
+        # Redeem
+        redeem_frame = tk.Frame(self.root)
+        redeem_frame.pack(pady=8)
+
+        tk.Label(redeem_frame, text="Redeem Points").grid(row=0, column=0, sticky="w")
+        self.entry_redeem = tk.Entry(redeem_frame, width=20)
+        self.entry_redeem.grid(row=0, column=1, padx=8)
+        tk.Button(redeem_frame, text="Redeem", command=self.redeem).grid(row=0, column=2)
+
+        # Output
+        self.bill_text = tk.StringVar(value="")
+        self.points_text = tk.StringVar(value="")
+
+        tk.Label(self.root, textvariable=self.bill_text, fg="blue", justify="left", anchor="w").pack(pady=10, fill="x", padx=10)
+        tk.Label(self.root, textvariable=self.points_text, fg="green").pack()
+
+    # ----------------------
+    # Helpers
+    # ----------------------
+    def _cart_total(self) -> float:
+        return sum(item["total"] for item in self.medicines)
+
+    def _refresh_cart_listbox(self):
+        self.listbox.delete(0, tk.END)
+        for item in self.medicines:
+            self.listbox.insert(
+                tk.END,
+                f"{item['name']} | Qty:{item['qty']} | Cost:₹{item['cost']} | Total:₹{item['total']}"
+            )
+
+    def _refresh_summary(self):
+        self.points_text.set(f"Total Points: {self.points}")
+
+    def _reset_bill_state(self):
+        self.bill_generated = False
+        self.last_total = 0.0
+        self.last_earned_points = 0
+        self.bill_text.set("")
+
+    # ----------------------
+    # Actions
+    # ----------------------
+    def add_medicine(self):
+        try:
+            name = self.entry_name.get().strip()
+            qty = int(self.entry_qty.get().strip())
+            cost = float(self.entry_cost.get().strip())
+
+            if not name or qty <= 0 or cost <= 0:
+                messagebox.showerror("Error", "Invalid input. Name must not be empty and Quantity/Cost must be > 0.")
+                return
+
+            total = qty * cost
+            self.medicines.append({"name": name, "qty": qty, "cost": cost, "total": total})
+
+            self._refresh_cart_listbox()
+            self._reset_bill_state()
+
+            self.entry_name.delete(0, tk.END)
+            self.entry_qty.delete(0, tk.END)
+            self.entry_cost.delete(0, tk.END)
+
+        except ValueError:
+            messagebox.showerror("Error", "Quantity must be an integer and Cost must be a number.")
+
+    def generate_bill(self):
+        if not self.medicines:
+            messagebox.showerror("Error", "No medicines added.")
             return
 
-        total = qty * cost
-        medicines.append((name, qty, cost, total))
+        total = self._cart_total()
+        earned_points = int(total // 100) * POINTS_PER_100_RUPEES
+        self.points += earned_points
 
-        listbox.insert(tk.END, f"{name} | Qty:{qty} | ₹{total}")
+        bill_lines = ["------ BILL ------"]
+        for item in self.medicines:
+            bill_lines.append(f"{item['name']} x{item['qty']} = ₹{item['total']}")
 
-        entry_name.delete(0, tk.END)
-        entry_qty.delete(0, tk.END)
-        entry_cost.delete(0, tk.END)
+        bill_lines.append("")
+        bill_lines.append(f"Total: ₹{total}")
+        bill_lines.append(f"Points Earned (this visit): {earned_points}")
 
-    except:
-        messagebox.showerror("Error", "Invalid Input")
+        self.bill_text.set("
+".join(bill_lines))
+        self._refresh_summary()
 
+        self.bill_generated = True
+        self.last_total = total
+        self.last_earned_points = earned_points
 
-# ========================================
-# Generate Bill
-# ========================================
-def generate_bill():
-    global points
-
-    if not medicines:
-        messagebox.showerror("Error", "No medicines added")
-        return
-
-    total = sum(item[3] for item in medicines)
-    cur_points = total // 100
-    points += cur_points
-
-    bill = "------ BILL ------\n"
-    for m in medicines:
-        bill += f"{m[0]} x{m[1]} = ₹{m[3]}\n"
-
-    bill += f"\nTotal: ₹{total}\n"
-    bill += f"Points Earned: {cur_points}\n"
-
-    bill_text.set(bill)
-    points_text.set(f"Total Points: {points}")
-
-
-# ========================================
-# Redeem Points
-# ========================================
-def redeem():
-    global points
-
-    try:
-        total = sum(item[3] for item in medicines)
-
-        if points < 10:
-            messagebox.showinfo("Info", "Not enough points")
+    def redeem(self):
+        if not self.medicines:
+            messagebox.showerror("Error", "No medicines added.")
             return
 
-        redeem_points = int(entry_redeem.get())
-
-        if redeem_points > points:
-            messagebox.showerror("Error", "Not enough points")
+        # Enforce normal flow: generate bill first
+        if not self.bill_generated:
+            messagebox.showinfo("Info", "Please click 'Generate Bill' before redeeming points.")
             return
 
-        discount = redeem_points * 25
-
-        if discount > total:
-            messagebox.showerror("Error", "Discount too high")
+        if self.points < MIN_POINTS_TO_REDEEM:
+            messagebox.showinfo("Info", f"Not enough points to redeem. Minimum required: {MIN_POINTS_TO_REDEEM}.")
             return
 
+        try:
+            redeem_points = int(self.entry_redeem.get().strip())
+        except ValueError:
+            messagebox.showerror("Error", "Redeem points must be an integer.")
+            return
+
+        if redeem_points <= 0:
+            messagebox.showerror("Error", "Redeem points must be > 0.")
+            return
+
+        total = self.last_total
+        max_by_bill = int(total // RUPEES_PER_POINT)
+        max_redeemable = min(self.points, max_by_bill)
+
+        if max_redeemable <= 0:
+            messagebox.showinfo("Info", "This bill is too small to redeem any points.")
+            return
+
+        if redeem_points > max_redeemable:
+            messagebox.showerror(
+                "Error",
+                f"You can redeem at most {max_redeemable} points for this bill (Available: {self.points})."
+            )
+            return
+
+        discount = redeem_points * RUPEES_PER_POINT
         final = total - discount
-        points -= redeem_points
 
-        bill_text.set(f"Final Bill after redeem: ₹{final}")
-        points_text.set(f"Remaining Points: {points}")
+        self.points -= redeem_points
+        self._refresh_summary()
 
-    except:
-        messagebox.showerror("Error", "Invalid Input")
+        self.bill_text.set(
+            self.bill_text.get()
+            + "\n"
+            + f"Redeemed Points: {redeem_points} (₹{discount} discount)\n"
+            + f"Final Bill after redeem: ₹{final}"
+        )
+
+        # After redeeming, start fresh cart to avoid double counting
+        self.clear_cart()
+
+    def clear_cart(self):
+        self.medicines.clear()
+        self._refresh_cart_listbox()
+        self.entry_redeem.delete(0, tk.END)
+        self._reset_bill_state()
+
+    def new_visit(self):
+        # New visit = clear cart and bill view, points remain (loyalty points persist)
+        self.clear_cart()
+        messagebox.showinfo("Info", "New visit started. Points are carried forward.")
 
 
-# ========================================
-# Clear All
-# ========================================
-def clear_all():
-    medicines.clear()
-    listbox.delete(0, tk.END)
-    bill_text.set("")
-    
-
-# ========================================
-# GUI Setup
-# ========================================
-root = tk.Tk()
-root.title("Pharmacy Billing System")
-root.geometry("500x600")
-
-tk.Label(root, text="Pharmacy Billing System", font=("Arial", 16, "bold")).pack(pady=10)
-
-# Inputs
-tk.Label(root, text="Medicine Name").pack()
-entry_name = tk.Entry(root)
-entry_name.pack()
-
-tk.Label(root, text="Quantity").pack()
-entry_qty = tk.Entry(root)
-entry_qty.pack()
-
-tk.Label(root, text="Cost").pack()
-entry_cost = tk.Entry(root)
-entry_cost.pack()
-
-tk.Button(root, text="Add Medicine", command=add_medicine).pack(pady=5)
-
-# Listbox
-listbox = tk.Listbox(root, width=50)
-listbox.pack(pady=10)
-
-# Buttons
-tk.Button(root, text="Generate Bill", command=generate_bill).pack(pady=5)
-
-tk.Label(root, text="Redeem Points").pack()
-entry_redeem = tk.Entry(root)
-entry_redeem.pack()
-
-tk.Button(root, text="Redeem", command=redeem).pack(pady=5)
-
-tk.Button(root, text="Clear", command=clear_all).pack(pady=5)
-
-# Output
-bill_text = tk.StringVar()
-points_text = tk.StringVar()
-
-tk.Label(root, textvariable=bill_text, fg="blue", justify="left").pack(pady=10)
-tk.Label(root, textvariable=points_text, fg="green").pack()
-
-root.mainloop()
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = PharmacyBillingApp(root)
+    root.mainloop()
