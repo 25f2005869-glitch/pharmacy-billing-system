@@ -1,91 +1,235 @@
-💊 Pharmacy Billing System
+# 💊 Pharmacy Billing System
 
-A beginner-friendly Python project that simulates a real-world pharmacy billing system.
-It includes both a **Command Line (CLI)** version and a **Graphical User Interface (GUI)** version.
+![Python](https://img.shields.io/badge/Python-3.x-blue)
+![Project](https://img.shields.io/badge/Project-Pharmacy%20Billing-success)
+![GUI](https://img.shields.io/badge/GUI-Tkinter-orange)
+![Status](https://img.shields.io/badge/Status-Active-brightgreen)
+
+A beginner-friendly Python project that simulates a real-world pharmacy billing system.  
+This project includes both a Command Line Interface (CLI) version and a Graphical User Interface (GUI) version using Tkinter.
 
 ---
 
-## 📌 Project Overview
+# 📚 Project Overview
 
 This project is designed to practice Python programming by building a real-world billing system used in medical stores.
 
-It calculates medicine bills, assigns loyalty points, and allows customers to redeem points in future visits.
+The system can:
+
+- Calculate medicine bills
+- Track customer loyalty points
+- Redeem loyalty points
+- Handle multiple customer visits
+- Maintain cart-based billing
+- Generate final bills automatically
+
+The project focuses on improving:
+- Python fundamentals
+- Problem solving
+- GUI development
+- Logic building
+- Billing system workflow understanding
 
 ---
 
-## ⚙️ Features
+# ✨ Features
 
-- Multiple customer visits (loyalty points carry forward)
-- Multiple medicines per visit
+## ✅ Billing Features
+
+- Multiple medicine entries
 - Automatic bill calculation
-- Loyalty points system (earn + redeem)
-- Discount calculation using points
-- Input validation (CLI + GUI)
+- Quantity-based pricing
+- Final bill generation
+- Customer visit tracking
+
+## ✅ Loyalty Points System
+
+- Earn points on purchases
+- Redeem points for discounts
+- Carry forward points between visits
+
+## ✅ CLI Version
+
+- Terminal-based interaction
+- Lightweight execution
+- Simple input/output handling
+
+## ✅ GUI Version
+
+- Tkinter graphical interface
+- Interactive buttons
+- Cart management
+- User-friendly billing workflow
 
 ---
 
-## 🎁 Loyalty Points Logic
+# 🎯 Loyalty Points Logic
 
-- **₹100 bill = 1 point**
-- Example: ₹560 bill ⇒ `560 // 100 = 5` points
+- ₹100 bill = 1 loyalty point
 
----
+### Example
 
-## 🔄 Redemption Rules
-
-- **1 point = ₹25 discount**
-- **Minimum 10 points required** to redeem
-- Cannot redeem more than available points
-- Cannot redeem more than what the bill allows
+```text
+₹560 bill = 560 // 100 = 5 points
+```
 
 ---
 
-## ▶️ How to Run
+# 🎁 Redemption Rules
 
-### ✅ CLI Version
+- 1 point = ₹25 discount
+- Minimum 10 points required for redemption
+- Cannot redeem more points than available
+- Cannot redeem more discount than bill amount
+
+---
+
+# 🛠️ How to Run
+
+## Clone Repository
+
+```bash
+git clone https://github.com/25f2005869-glitch/pharmacy-billing-system.git
+```
+
+---
+
+## Move into Project Folder
+
+```bash
+cd pharmacy-billing-system
+```
+
+---
+
+# 💻 Run CLI Version
+
 ```bash
 python pharmacy_billing_system.py
 ```
 
-### ✅ GUI Version (Tkinter)
+---
+
+# 🖥️ Run GUI Version
+
 ```bash
 python pharmacy_billing_gui.py
 ```
 
 ---
 
-## 🖥️ GUI Notes
+# 📂 Project Structure
 
-- **Add Medicine**: Adds medicines to the cart.
-- **Generate Bill**: Generates bill and adds earned points.
-- **Redeem**: Redeems points (only after generating bill, and only if points ≥ 10).
-- **Clear Cart**: Clears current cart items.
-- **New Visit**: Starts a new visit (cart clears, points carry forward).
-
----
-
-## 📁 Project Structure
-
+```text
 pharmacy-billing-system/
 │
-├── pharmacy_billing_system.py   # CLI version
-├── pharmacy_billing_gui.py      # GUI version (Tkinter)
-├── README.md
-└── sample-output.txt
+├── pharmacy_billing_system.py
+├── pharmacy_billing_gui.py
+├── pharmacy_billing_system.png
+├── pharmacy_billing_terminal.png
+└── README.md
+```
 
 ---
 
-## 🛠 Technologies Used
+# 🖼️ Project Screenshots
+
+## 💻 CLI Version
+
+![CLI Screenshot](pharmacy_billing_terminal.png)
+
+---
+
+## 🖥️ GUI Version
+
+![GUI Screenshot](pharmacy_billing_system.png)
+
+---
+
+# ⚙️ GUI Workflow
+
+## Add Medicine
+Adds medicines and quantities to the cart.
+
+## Generate Bill
+Calculates total bill and earned loyalty points.
+
+## Redeem Points
+Applies discount using earned points.
+
+## Clear Cart
+Removes all cart items.
+
+## New Visit
+Starts a new customer session while keeping loyalty points.
+
+---
+
+# 📈 Skills Practiced
+
+- Python Programming
+- Tkinter GUI Development
+- Conditional Logic
+- Functions
+- Loops
+- Billing Logic
+- Cart Management
+- Data Handling
+- Problem Solving
+- User Interaction Design
+
+---
+
+# 🧠 Concepts Used
+
+- Functions
+- Lists
+- Dictionaries
+- Conditional Statements
+- Loops
+- Input Validation
+- GUI Widgets
+- Event Handling
+- Modular Programming
+
+---
+
+# 🚀 Future Improvements
+
+Planned future updates:
+
+- Database integration
+- Invoice generation
+- Customer history tracking
+- Medicine inventory management
+- Search functionality
+- Login authentication
+- PDF bill export
+- Dark mode GUI
+- Data analytics dashboard
+
+---
+
+# 🧰 Technologies Used
 
 - Python 3
-- Tkinter (GUI)
+- Tkinter
+- VS Code
+- Git
+- GitHub
 
 ---
 
-## 👨‍💻 Author
+# 👨‍💻 Author
 
 Saloni Tiwari  
 Python & Data Science Student
+
+---
+
+# 🙏 Acknowledgement
+
+This project is part of my continuous programming learning journey focused on building practical Python applications through real-world problem solving and structured development practice.
 
 ---
 
